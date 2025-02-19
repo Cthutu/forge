@@ -47,6 +47,8 @@ typedef struct
     TokenValue value;
     usize      offset; // Start position in source
     usize      length; // Length of token in source
+    usize      line;   // 0-based line number
+    usize      column; // 0-based column number
 } Token;
 
 typedef struct
@@ -54,6 +56,8 @@ typedef struct
     const u8* source; // Input buffer
     usize     length; // Total length of source
     usize     offset; // Current position in source
+    usize     line;   // Current line (0-based)
+    usize     column; // Current column (0-based)
 } Lexer;
 
 // Initialize the character-to-token type mapping table

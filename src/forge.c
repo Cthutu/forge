@@ -26,34 +26,9 @@ static const char* token_type_to_string(TokenType type)
     }
 }
 
-static void print_buffer(const char* buffer, size_t size)
+static void print_buffer(const char* buffer$, size_t size)
 {
-    for ( size_t i = 0; i < size; i++ ) {
-        unsigned char c    = buffer[ i ];
-        TokenType     type = c < 128 ? char_to_token[ c ] : TT_INVALID;
-        const char*   display_char;
-        switch ( c ) {
-            case '\n':
-                display_char = "\\n";
-                break;
-            case '\r':
-                display_char = "\\r";
-                break;
-            case '\t':
-                display_char = "\\t";
-                break;
-            case ' ':
-                display_char = "\\s";
-                break;
-            default:
-                display_char = NULL;
-        }
-        if ( display_char ) {
-            printf("%s: %s\n", display_char, token_type_to_string(type));
-        } else {
-            printf("%c: %s\n", c, token_type_to_string(type));
-        }
-    }
+    printf("File contents:\n%.*s\n", ( int )size, buffer$);
 }
 
 int main(int argc, char** argv)
@@ -68,6 +43,13 @@ int main(int argc, char** argv)
     if ( !content ) {
         return 1;
     }
+
+    // Print file contents
+    print_buffer(content, size);
+
+    // Print separator bar
+    printf("\n---------------------------------------------------------"
+           "\nTokens:\n");
 
     // Process all tokens
     Lexer lexer = lex_init(( const u8* )content, size);

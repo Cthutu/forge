@@ -16,13 +16,18 @@ static const char* token_type_strings[] = {
 
 Lexer lex_init(const u8* source, usize length)
 {
-    return ( Lexer ){ .source = source, .length = length, .offset = 0 };
+    return ( Lexer ){
+        .source = source, .length = length, .offset = 0, .line = 0, .column = 0
+    };
 }
 
 void dump_token(Token token)
 {
-    printf("Token { type: %-12s, offset: %3zu, length: %2zu",
+    printf("Token { type: %-12s, line: %3zu, col: %3zu, offset: %3zu, length: "
+           "%2zu",
            token_type_strings[ token.type ],
+           token.line + 1,   // Convert to 1-based for display
+           token.column + 1, // Convert to 1-based for display
            token.offset,
            token.length);
 
@@ -56,23 +61,38 @@ void dump_token(Token token)
 
 Token lex_token(Lexer* lexer)
 {
-    // Skip any whitespace
+    // Skip any whitespace, updating line/column info
     while ( lexer->offset < lexer->length ) {
         u8 c = lexer->source[ lexer->offset ];
         if ( c >= 128 || char_to_token[ c ] != TT_SPACE ) {
             break;
+        }
+
+        // Update position info
+        if ( c == '\n' ) {
+            lexer->line++;
+            lexer->column = 0;
+        } else {
+            lexer->column++;
         }
         lexer->offset++;
     }
 
     // Check for end of input
     if ( lexer->offset >= lexer->length ) {
-        return (
-            Token ){ .type = TT_EOF, .offset = lexer->offset, .length = 0 };
+        return ( Token ){ .type   = TT_EOF,
+                          .offset = lexer->offset,
+                          .length = 0,
+                          .line   = lexer->line,
+                          .column = lexer->column };
     }
 
-    u8        c    = lexer->source[ lexer->offset ];
-    TokenType type = (c < 128) ? char_to_token[ c ] : TT_INVALID;
+    // Store starting position for token
+    usize     start_line   = lexer->line;
+    usize     start_column = lexer->column;
+
+    u8        c            = lexer->source[ lexer->offset ];
+    TokenType type         = (c < 128) ? char_to_token[ c ] : TT_INVALID;
 
     Token     token;
     switch ( type ) {
@@ -130,7 +150,14 @@ Token lex_token(Lexer* lexer)
             break;
     }
 
+    // Update token with position info
+    token.line     = start_line;
+    token.column   = start_column;
+
     lexer->offset += token.length;
+    // Update lexer position (column only, since newlines are handled in
+    // whitespace)
+    lexer->column += token.length;
     return token;
 }
 
