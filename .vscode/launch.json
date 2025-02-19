@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "LLDB Launch",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/_bin/forge",
+            "args": [
+                "etc/hello.f"
+            ],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build",
+        }
+    ]
+}
