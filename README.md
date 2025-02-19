@@ -14,4 +14,3 @@ The bootstrap process is therefore:
 - Create F0 again by compiling the F0 codebase in F0.
 - Create F by compiling the F codebase in F0.
 - Create F by compiling the F codebase in F.
-- 
