@@ -1,7 +1,6 @@
 #pragma once
 
-#include "data.h"
-#include <stdint.h>
+#include "forge.h"
 
 // Token type enumeration
 typedef enum

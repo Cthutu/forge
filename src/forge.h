@@ -1,10 +1,8 @@
-//------------------------------------------------------------------------------
-// Contains a collection of data handling utilities and types.
-//------------------------------------------------------------------------------
-
 #pragma once
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 //------------------------------------------------------------------------------
 // Basic types and definitions
@@ -53,3 +51,15 @@ void  arena_done(Arena* arena);
 void* arena_alloc(Arena* arena, usize size);
 
 #define ARENA_ALLOC(arena, type) ( type* )arena_alloc((arena), sizeof(type))
+
+//------------------------------------------------------------------------------
+// File I/O functions
+//------------------------------------------------------------------------------
+
+// Read a file into memory using memory mapping
+// Returns a pointer to the mapped content, or NULL on error
+// If size_out is not NULL, writes the file size to it
+char* read_file(const char* path, size_t* size_out);
+
+// Close a memory-mapped file
+void  close_file(char* content);

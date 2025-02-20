@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "file_ops.h"
+#include "forge.h"
 #include "lexer.h"
 
 static const char* token_type_to_string(TokenType type)
