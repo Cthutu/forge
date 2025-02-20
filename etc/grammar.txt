@@ -1,0 +1,19 @@
+<program> := <global-statement> | <global_statement> <program>
+
+<global-statement> := <declaration>
+
+<declaration> := <ident> : : <literal>
+
+<literal> := <function_literal>
+
+<function_literal> := <function-definition>
+
+<function-definition> := <params> -> <expression>
+
+<params> := ( )
+
+<expression> := <function-call>
+
+<function-call> := <ident> <args>
+
+<args> := ( )
